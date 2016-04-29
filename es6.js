@@ -63,47 +63,65 @@ console.log(a); // 4
 /////////////////////////////////////////////////////////////////////////////////
 // classes
 /////////////////////////////////////////////////////////////////////////////////
-class Parent {
+// class expression, unnamed
+const Auto = class {};
+// class expression, named
+const Motorrad = class Motorrad {};
 
+// class declaration
+class Parent {
   // ES7
   age = 34;
 
-  constructor() {
+  constructor( name, age ) {
+    this.name = name;
+    this.age = age;
+  }
 
+  get greetings() {
+    return this.sayHello();
+  }
+
+  sayHello() {
+    return `Hello, I'm ${ name }, ${ age } years old`;
   }
 
   static foo() {
-
   }
 
   bar() {
-
   }
 
 }
 
-const john = new Parent();
+const john = new Parent( 'John', 44 );
 john.bar();
 Parent.foo();
+john.greetings; // 'Hello I'm John, 44 years old'
 
 // ES7
 john.age; // 34
 
 class Child extends Parent {
+  constructor( name, age, gender ) {
+    super( name, age );
+    this.gender = gender;
+  }
 
-  constructor() {
-    super();
+  sayHello() {
+    console.log( 'a child is about to speak' );
+    super.sayHello();
   }
 
   baz() {
-
   }
 
 }
 
-const jo = new Child();
-jo.baz();
-jo.bar();
+const jo = new Child( 'Jo', 12, 'female' );
+jo.baz(); // ok
+jo.bar(); // from parent
+
 
 
 
@@ -229,11 +247,11 @@ import { foo as foolish, pi as mathPi } from 'myMod';
 
 
 /////////////////////////////////////////////////////////////////////////////////
-// comosition
+// composition
 /////////////////////////////////////////////////////////////////////////////////
 
 // reusable functions
-const barker = ( state ) => ({ // wrapping the {} so it behaves like an object takig in an arg, not a func
+const barker = ( state ) => ({ // wrapping the {} so it's evaluated?
   bark: () => console.log( `Woof, I am ${ state.name }` )
 })
 
