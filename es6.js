@@ -15,7 +15,7 @@ var { bar, baz } = foo;
 
 
 
-calcBMI( { height: h, weight: w, max = 25, callback } ) {
+calcBMI( { height: h, weight: w, max = 25, callback } = {} ) {
   // do something
   // h + w, etc
   // callback();
