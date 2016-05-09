@@ -1,3 +1,8 @@
+Helpers:
+  h # get a list of helpers
+
+##############################################################
+##############################################################
 Basic types
   Value Types:
     Integers
@@ -44,9 +49,30 @@ Basic types
       { 1, 2 }  { :ok, 42, "next" } { :error, :enoent }
       usually have 2 - 4 elements, anymore typically use maps and structs
       can be used in pattern matching { a, b } = { 1, 2 }
-    Lists
-    Maps
+    Lists: eg. [ 1, 2, 3 ]
+      finding random item is expensive ( scans n - 1 times )
+      [ 1, 2 ] ++ [ 4, 5 ] # [ 1, 2, 4, 5 ]
+      [ 1, 2, 3 ] -- [ 2 ] # [ 1, 3 ]
+      1 in [ 1, 2, 3 ] # true
+      Shortcuts:
+        [ name: "Billiam", city: "Stockholm" ] # [ { :name, "Billiam " }, { :city, "Stockholm" } ]
+    Maps: collection of key / value pairs
+      %{ key => value, keyTwo => value }
+      states = %{ "AL" => "Alabama", "OR" => "Oregon" }
+      responses = %{ { :error, :enoent } => :fatal, { :error, :busy } => :retry }
+      colors = %{ :red => 0xff0000, :green => 0x00f00 }
+      Access using bracket syntax, or dot notation for atoms
     Binaries
+      Binary literal:
+        # pack successive integers into byets
+        bin = << 1, 2 >>
+        byte_size bin # 2
+        bin = << 3 :: size(2), 5 :: size(4), 1 :: size(2) >>
+        :io.format("~-8.2b~n", :binary.bin_to_list(bin))
+        byte_size bin # 1
+
+##############################################################
+##############################################################
 
 force existing variable to use its value in a match operation:
 > a = 1
@@ -61,3 +87,110 @@ copying data using [ head | tail ]
 [ 1, 2, 3]
 > b = [ 5 | a ]
 [ 5, 1, 2, 3 ]
+
+##############################################################
+##############################################################
+
+Anon Func (invoke with . )
+
+my_applier = func, val -> func( val )
+my_applier.( IO.puts, "hello" )
+
+open_handler = fn
+  { :ok, file } -> "First line: #{ IO.read( file, :line ) }"
+  { _, error } -> "Error: #{ :file.format_error( error ) }"
+end
+
+##############################################################
+##############################################################
+
+Shorthand
+
+Enum.map [ 1, 2, 3 ], &( &1 * 10 )
+
+##############################################################
+##############################################################
+
+
+With Expression: temp vars with local scope; "<-" operator for elegant error handling
+
+lp = with { :ok, file }   = File.open( "hello.txt" ),
+          content         = IO.read( file, :all ),
+          :ok             = File.close( file ),
+          [ _, uid, gid ] = Regex.run( ~r/_lp:.*?:(\d+):(\d+)/, content )
+     do
+       "Group: #{ gid }, User: #{ uid }"
+     end
+
+with [ a | _ ] <- [ 1, 2, 3 ], do: a
+# 1
+with [ a | _ ] <- nil,         do: a
+# nil
+
+##############################################################
+##############################################################
+
+Pattern Matching example (also named funcs - must be in modules)
+defmodule MyMod do
+  def factorial( 0 ), do: 1
+  def factorial( n ), do: n * factorial( n - 1 )
+end
+
+##############################################################
+##############################################################
+
+Guard Clause
+
+defmodule Factorial do
+  def of( 0 ), do: 1
+  def of( n ) when n > 0 do
+    n * of( n - 1 )
+  end
+  # alternatively:
+  # def of( n ) when n > 0 do: n * of( n - 1 )
+end
+
+Clauses:
+- comparisons:
+    ==, ===, etc
+- boolean and negation
+    or, and, not, ! # cannot use || &&
+- math
+- join:
+    <>, ++ # left side must be a literal
+- membership:
+    thing in group
+- type check
+    is_atom
+    is_binary
+    is_bitstring
+    is_boolean
+    is_exception
+    is_float
+    is_function
+    is_integer
+    is_list
+    is_map
+    is_number
+    is_pid
+    is_port
+    is_record
+    is_reference
+    is_tuple
+- value check
+    abs( num )
+    bit_size( bitstring )
+    byte_size( bitstring )
+    div( num, num )
+    elem( tuple, n )
+    float( term )
+    hd( list )
+    length( list )
+    node()
+    node( pid | ref | port )
+    rem( num, num )
+    round( num )
+    self()
+    tl( list )
+    trunc( num )
+    tuple_size( tuple )
