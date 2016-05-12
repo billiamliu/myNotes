@@ -194,3 +194,43 @@ Clauses:
     tl( list )
     trunc( num )
     tuple_size( tuple )
+
+##############################################################
+##############################################################
+
+Default Params (named funcs)
+
+defmodule Example do
+  def func( p1, p2 \\ 2, p3 \\ 3, p4 ) do
+    IO.inspect [ p1, p2, p3, p4 ]
+  end
+end
+
+Example.func( "a", "b" ) # ["a", 2, 3, "b"]
+Example.func( "a", "c", "b" ) # ["a", "c", 3, "b"]
+
+Multi-clause defaults:
+
+defmodule Params do
+  def func( p1, p2 \\ 234 )
+
+  def func( p1, p2 ) when is_list( p1 ) do
+    "You said #{ p2 } with a list"
+  end
+
+  def func( p1, p2 ) do
+    "You passed in #{ p1 } and #{ p2 }"
+  end
+end
+
+IO.puts Params.func( 99 )             # you passed in 99 and 234
+IO.puts Params.func( 99, "cat" )      # you passed in 99 and cat
+IO.puts Params.func( [ 99 ] )         # you said 234 with a list
+IO.puts Params.func( [ 99 ], "dog" )  # you said dog with a list
+
+##############################################################
+##############################################################
+
+Private Functions: can only be callued within the module
+
+defp priv( a ), do: true
