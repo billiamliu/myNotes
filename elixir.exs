@@ -61,3 +61,15 @@ copying data using [ head | tail ]
 [ 1, 2, 3]
 > b = [ 5 | a ]
 [ 5, 1, 2, 3 ]
+
+
+Piping: |>
+  # takes the output and makes it the first arg of the next func
+  # if next func has args specified, they get pushed
+  customers = DB.get("customers")
+  ret = calc_tax.(customers, 2016)
+  # can be written as:
+  ret = DB.get("customers") |> calc_tax.(2016)
+  
+  # always wrap args/params in parenthesis
+  ( 1..10 ) |> Enum.map( &( &1 * &2 ) )
