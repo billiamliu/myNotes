@@ -18,5 +18,11 @@ git config --global user.email "$EMAIL"
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim $PATHOGEN
 git clone $NERDTREE ~/.vim/bundle/
 git clone $AIRLINE ~/.vim/bundle/vim-airline
-echo "Generating SSH key, run `ssh-add ~/.ssh/id_rsa` afterwards to add key to agent. The rest is all yours."
-ssh-keygen -t rsa -b 4096 -C "$EMAIL"
+echo "Do you want to generate a SSH key? [y/n]"
+read ANS
+if [ "$ANS" = "y" ]; then
+  echo "Generating SSH key, run `ssh-add ~/.ssh/id_rsa` afterwards to add key to agent. The rest is all yours."
+  ssh-keygen -t rsa -b 4096 -C "$EMAIL"
+else
+  echo "Ok, all done."
+fi
