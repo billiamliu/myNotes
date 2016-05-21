@@ -301,7 +301,7 @@ Module Attributes
 defmodule Example do
   @author "Billiam Liu"
   def get_author do
-    @author
+    author
   end
   @author "Billiam"
   def get_firstname do
@@ -417,6 +417,184 @@ db = [ { :name, "Billiam" }, { :likes, "Elixir" }, { :where, "Vancouver", "Canad
 > List.keyfind( db, "Canada", 1, "Error: no city called Canada" ) # "Error: no city called Canada"
 > db = List.keydelete( db, "Canada", 2 ) # [ name: "Billiam", likes: "Elixir" ]
 > db = List.keyreplace( db, :name, 0, { :first_name, "Billiam" } ) # [ first_name: "Billiam", likes: "Elixir" ]
+
+##############################################################
+Keyword List
+##############################################################
+[ fg: "black", bg: "white", font: "Helvetica" ]
+# simple access
+kwlist[:fg] # "black"
+# since it's just a list, `Enum` and `List` operations can be used
+# Keyword.get/3 (kwlist, key, default \\ nil)
+Keyword.get( kwlist, :pattern, "solid" ) # "solid"
+
+##############################################################
+Maps
+##############################################################
+a_map = %{ key: value }
+another_map = %{ "thing" => "val", 3 => "three" }
+my_map = %{ name: "Billiam", likes: "Elixir", city: "Vancouver" }
+> Map.keys my_map # [ :name, :likes, :city ]
+> Map.values my_map # { "Billiam", "Elixir", "Vancouver" }
+> my_map[:name] # "Billiam"
+> my_map.name # "Billiam"
+> new_map = Map.drop my_map, [ :likes, :where ] # %{ name: "Billiam" }
+> another_map = Map.put new_map, :country, "Canada" # %{ name: "Billiam", country: "Canada" }
+> { value, updated_map } = Map.pop another_map, :country # { "Canada", %{ name: "Billiam" } }
+
+# use matching to query maps
+person = %{ name: "Billiam", city: "Vancouver" }
+# find if key exists, and match value to a variable
+%{ name: a_name } = person
+> a_name # "Billiam"
+# do both keys exist?
+> %{ name: _, height: _ } = person # MatchError b/c no :height
+
+##############################################################
+For Loop
+##############################################################
+
+people = # a list of maps %{ name: "Smith", height: 1.82 }
+> for person = %{ height: height } <- people, height > 1.5, do: person # [ %{}, %{} ]
+
+defmodule HotelRoom do
+
+  def book(%{ name: name, height: height })
+  when height > 1.9 do
+    IO.puts "Need extra long bed for #{name}"
+  end
+
+  def book(%{ name: name, height: height })
+  when height < 1.3 do
+    IO.puts "Need low shower controls for #{name}"
+  end
+
+  def book(person) do # matches entire Map to person
+    IO.puts "Need regular bed for #{person.name}"
+  end
+
+end
+
+people |> Enum.each( &HotelRoom.book/1 ) # specify &fun/arity or &(&1)
+# Need regular bed for Dave
+# Need extra long bed for Jane
+# ...
+
+# pattern matching cannot bind keys
+%{ 2 => state } = %{ 1 => :ok, 2 => :error } # state = :error
+%{ item => :ok } = %{ 1 => :ok, 2 => :error } # illegal, cannot bind item to 1
+
+# match variable keys using pin operator
+> data = %{ name: "Billiam", province: "BC", likes: "Elixir" }
+> for key <- [ :name, :likes ] do
+  %{ ^key => value } = data # `^` forces key to use own existing value
+  value
+end
+# ["Billiam", "Elixir"]
+
+##############################################################
+Updating Map
+##############################################################
+
+new_map = %{ old_map | key => value, key2 => another }
+
+m = %{ a: 1, b: 2, c: 3 }
+m1 = %{ m | b: "two", c: "three" } # %{ a: 1, b: "two", c: "three" }
+
+##############################################################
+Add Key to Map
+##############################################################
+
+# Map.put_new/3
+m = %{ a: 1, b: 2 }
+Map.put_new( m, :c, 3 ) # %{ c: 3, a: 1, b: 2 }
+# but does not update
+Map.put_new( m, :b, 4 ) # %{ a: 1, b: 2 }
+
+##############################################################
+Structs
+##############################################################
+
+defmodule Subscriber do # name of our typed map
+  defstruct name: "", paid: false, over_18: true # default values
+end
+
+# call with %struct_name{}
+> s1 = %Subscriber{} # %Subscriber{name: "", over_18: true, paid: false}
+> s2 = %Subscriber{ name: "Dave" } # %Subscriber{name: "Dave", over_18: true, paid: false}
+> s3 = %Subscriber{ name: "Mary", over_18: true, paid: true } # %Subscriber{ name: "Mary", over_18: true, paid: true }
+
+# used in pattern maching with variables
+> s3.name # "Mary"
+> %Subscriber{ name: a_name } = s3
+> a_name # "Mary"
+
+# Updates:
+> s4 = %Subscriber{ s3 | name: "Marlene" } # %Subscriber{ name: "Marlene", over_18: true, paid: true }
+
+##############################################################
+Structs with Specific Behaviours
+##############################################################
+
+defmodule Attendee do
+  defstruct name: "", paid: false, over_18: true
+
+  def can_attend_event( attendee = %Attendee{} ) do
+    attendee.paid && attendee.over_18
+  end
+
+  def print_badge(%Attendee{ name: name }) when name != "" do
+    IO.puts "#{name} can has badge"
+  end
+
+  def print_badge(%Attendee{}) do
+    raise "missing name for badge"
+  end
+end
+
+> a1 = %Attendee{ name: "Dave", over_18: true }
+> a2 = %Attendee{ a1 | paid: true }
+> a3 = %Attendee{ }
+
+> Attendee.can_attend_event( a1 ) # false
+> Attendee.print_badge( a2 ) # true
+> Attendee.print_badge( a3 ) # (RuntimeError) missing name for badge
+
+##############################################################
+Nested Dictionary Structs
+##############################################################
+
+defmodule Customer do
+  defstruct name: "", company: ""
+end
+
+defmodule BugReport do
+  defstruct owner: %Customer{}, details: "", severity: 1
+end
+
+> report = %BugReport{
+  owner: %Customer{ name: "Dave", company: "Spotify"},
+  details: "broken"
+} # %BugReport{ details: "broken", severity: 1, owner: %Customer{ company: "Spotify", name: "Dave" } }
+
+> report.owner.company # "Spotify"
+
+# ugly way of updating the nested company name
+> report = %BugReport{ report | owner: %Customer{ report.owner | company: "Dice" } }
+
+# other ways
+# put_in/3 data, keys, value
+# update_in/3 data, keys, fun
+# get_in/2 data, keys
+# get_and_update_in/3 data, keys, fun
+> put_in( report.owner.company, "Skype" ) # %BugReport{ ..., %Customer{ ..., company: "Skype" } }
+> update_in( report.owner.name, &("Mr. " <> &1) ) # ... %Customer{ ..., name: "Mr. Dave" }
+
+# can also use Accessors
+> put_in( report[:owner][:company], "Skype" )
+
+##############################################################
+##############################################################
 
 ##############################################################
 ##############################################################
