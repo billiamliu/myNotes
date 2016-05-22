@@ -75,6 +75,5 @@ fi
 while [ $KEY -lt "n" ]
 do
   echo -e '\n' | ssh-keygen -t rsa -N $KEY -b 4096 -C "$EMAIL"
-  eval "$(ssh-agent -s)"
-  echo "almost done SSH, make sure to run 'ssh-add ~/.ssh/id_rsa' and enter your passphrase"
+  echo "almost done SSH, make sure to run 'eval \"$(ssh-agent -s)\"' & 'ssh-add ~/.ssh/id_rsa' and enter your passphrase"
 done
