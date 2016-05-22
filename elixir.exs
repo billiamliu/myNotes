@@ -591,7 +591,7 @@ end
 > update_in( report.owner.name, &("Mr. " <> &1) ) # ... %Customer{ ..., name: "Mr. Dave" }
 
 # can also use Accessors
-> put_in( report[:owner][:company], "Skype" )
+> put_in( report[:owner][:company], "Skype" 
 
 ##############################################################
 ##############################################################
