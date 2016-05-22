@@ -4,6 +4,7 @@ NERDTREE=https://github.com/scrooloose/nerdtree.git
 AIRLINE=https://github.com/vim-airline/vim-airline
 ELIXIRURL=https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
 NODEURL=https://deb.nodesource.com/setup_6.x
+VIMRC=https://github.com/billiamliu/myNotes/raw/master/configFiles/.vimrc
 echo ">>> Enter your name:"
 read NAME
 echo ">>> Enter your email address:"
@@ -37,7 +38,7 @@ sudo apt-get -y install vim
 git config --global user.name "$NAME"
 git config --global user.email "$EMAIL"
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim $PATHOGEN
-curl -L https://github.com/billiamliu/myNotes/raw/master/configFiles/.vimrc > ~/.vimrc
+curl -L $VIMRC > ~/.vimrc
 git clone $NERDTREE ~/.vim/bundle/
 git clone $AIRLINE ~/.vim/bundle/vim-airline
 
