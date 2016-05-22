@@ -5,11 +5,14 @@ AIRLINE=https://github.com/vim-airline/vim-airline
 ELIXIRURL=https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
 NODEURL=https://deb.nodesource.com/setup_6.x
 VIMRC=https://github.com/billiamliu/myNotes/raw/master/configFiles/.vimrc
+GITIGNORE=https://github.com/billiamliu/myNotes/raw/master/configFiles/.gitignore
+
 echo ">>> Enter your name:"
 read NAME
 echo ">>> Enter your email address:"
 read EMAIL
 clear
+
 echo ">>> Hello $NAME at $EMAIL"
 echo ">>> (1/5) Install ssh-server? [y/n]"
 read SERV
@@ -31,12 +34,16 @@ echo "in 1."
 sleep 1
 echo ">>> All systems go."
 echo -en '\n'
+
 sudo apt-get update
 sudo apt-get -y install git
 sudo apt-get -y install tmux
 sudo apt-get -y install vim
+
 git config --global user.name "$NAME"
 git config --global user.email "$EMAIL"
+curl -L $GITIGNORE > ~/.gitignore
+
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim $PATHOGEN
 curl -L $VIMRC > ~/.vimrc
 git clone $NERDTREE ~/.vim/bundle/
