@@ -10,9 +10,9 @@ echo "Hello $NAME at $EMAIL"
 echo "------------"
 echo "Begin init script to set up this linux instance"
 sudo apt-get update
-sudo apt-get install git
-sudo apt-get install tmux
-sudo apt-get install vim
+sudo apt-get --assume-yes install git
+sudo apt-get --assume-yes install tmux
+sudo apt-get --assume-yes install vim
 git config --global user.name "$NAME"
 git config --global user.email "$EMAIL"
 mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vim $PATHOGEN
@@ -21,7 +21,7 @@ git clone $AIRLINE ~/.vim/bundle/vim-airline
 echo "Do you want to generate a SSH key? [y/n]"
 read ANS
 if [ "$ANS" = "y" ]; then
-  echo "Generating SSH key, run `ssh-add ~/.ssh/id_rsa` afterwards to add key to agent. The rest is all yours."
+  echo "Generating SSH key, run 'ssh-add ~/.ssh/id_rsa' afterwards to add key to agent. The rest is all yours."
   ssh-keygen -t rsa -b 4096 -C "$EMAIL"
 else
   echo "Ok, all done."
