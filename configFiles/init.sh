@@ -6,6 +6,7 @@ ELIXIRURL=https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
 NODEURL=https://deb.nodesource.com/setup_6.x
 VIMRC=https://github.com/billiamliu/myNotes/raw/master/configFiles/.vimrc
 GITIGNORE=https://github.com/billiamliu/myNotes/raw/master/configFiles/.gitignore
+SYNTASTIC=https://github.com/scrooloose/syntastic.git
 
 echo ">>> Enter your name:"
 read NAME
@@ -48,6 +49,7 @@ mkdir -p ~/.vim/autoload ~/.vim/bundle && curl -LSso ~/.vim/autoload/pathogen.vi
 curl -L $VIMRC > ~/.vimrc
 git clone $NERDTREE ~/.vim/bundle/
 git clone $AIRLINE ~/.vim/bundle/vim-airline
+git clone $SYNTASTIC ~/.vim/bundle/
 
 if [ "$SERV" = "y" ] || [ "$SERV" = "Y" ]; then
   sudo apt-get -y install ssh-server
@@ -58,6 +60,7 @@ if [ "$NODE" = "y" ] || [ "$NODE" = "Y" ]; then
   curl -sL $NODEURL | sudo -E bash -
   sudo apt-get -y install nodejs
   sudo ln -s /usr/bin/nodejs /usr/bin/node
+  sudo npm install -g jshint
 fi
 
 if [ "$ELIXIR" = "y" ] || [ "$ELIXIR" = "Y" ]; then
