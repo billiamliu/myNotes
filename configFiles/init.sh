@@ -60,7 +60,7 @@ if [ "$NODE" = "y" ] || [ "$NODE" = "Y" ]; then
   curl -sL $NODEURL | sudo -E bash -
   sudo apt-get -y install nodejs
   sudo ln -s /usr/bin/nodejs /usr/bin/node
-  sudo npm install -g jshint
+  sudo npm install -g eslint
 fi
 
 if [ "$ELIXIR" = "y" ] || [ "$ELIXIR" = "Y" ]; then
