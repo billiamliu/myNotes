@@ -1,6 +1,10 @@
-The bundled VIM doesn't have all the dependencies (e.g. eval)
+The bundled VIM doesn't have all the dependencies
 Get MacVIM, then change terminal editor alias:
+In `~/.bash_profile`
 ```
-~/.bash_profile
-  alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
+alias vim='/Applications/MacVim.app/Contents/MacOS/Vim'
+```
+ALSO, in `.gitconfig`
+```
+autocrlf = false
 ```
