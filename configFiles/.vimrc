@@ -8,6 +8,8 @@ set shiftwidth=2
 set expandtab
 syntax on
 
+color onedark
+
 execute pathogen#infect()
 filetype plugin indent on
 
@@ -15,13 +17,10 @@ filetype plugin indent on
 set laststatus=2
 let g:airline_theme='zenburn'
 
-" vim theme
-colo peachpuff
-
 " for NERDTree
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-map <F3>:NerdTreeToggle<CR>
+map <F3> :NerdTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NerdTree.isTabTree()) | q | endif
 
 " for syntastic
