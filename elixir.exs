@@ -112,7 +112,11 @@ Shorthand
 Enum.map [ 1, 2, 3 ], &( &1 * 10 )
 
 ##############################################################
-With Expression: temp vars with local scope; "<-" operator for elegant error handling
+With Expression: temp vars with local scope;
+temporary variables are meant to be short-lived, and prevents leaking into other scope
+! the value of the `with` is the value of its `do` parameter
+! use "<-" operator for elegant error handling, if
+! match failes returns the value that didn not match, rather than MatchError
 ##############################################################
 
 lp = with { :ok, file }   = File.open( "hello.txt" ),
@@ -591,10 +595,21 @@ end
 > update_in( report.owner.name, &("Mr. " <> &1) ) # ... %Customer{ ..., name: "Mr. Dave" }
 
 # can also use Accessors
-> put_in( report[:owner][:company], "Skype" 
+> put_in( report[:owner][:company], "Skype"
 
 ##############################################################
+Enum
 ##############################################################
+# iterate, filter, combine, split, etc on collections
+Enum.to_list 1..5 # [1, 2, 3, 4, 5]
+Enum.concat( [1, 2], [3, 4] ) # [1, 2, 3, 4]
+Enum.concat( [1, 2], 'ab' ) # [1, 2, 97, 98]
+Enum.map( [1, 2], &( &1 * 10 ) ) # [10, 20]
+Enum.at( 10..20, 3 ) # 13
+Enum.at( 10..20, 20 ) # nil
+Enum.at( 10..20, 20, :no_one_here ) # :no_one_here
+Enum.filter( [1, 2, 3], &Integer.is_even/1 ) # [2]
+Enum.reject( [1, 2, 3], &Integer.is_even/1 ) # [1, 3]
 
 ##############################################################
 ##############################################################
