@@ -251,7 +251,7 @@ import { foo as foolish, pi as mathPi } from 'myMod';
 /////////////////////////////////////////////////////////////////////////////////
 
 // reusable functions
-const barker = ( state ) => ({ // wrapping the {} so it's evaluated?
+const barker = ( state ) => ({ // wrapping Object literal in () so it's not interpreted as a fn block (=> has implicit return)
   bark: () => console.log( `Woof, I am ${ state.name }` )
 })
 
