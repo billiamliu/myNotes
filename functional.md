@@ -1,4 +1,3 @@
-
 # Identity function
 ## JavaScript
 ```JavaScript
