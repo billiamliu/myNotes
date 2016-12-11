@@ -168,6 +168,12 @@ defmodule Maybe do
     bind( val, func )
   end
 
+  def %Nothing{} ~> func, do: nil
+
+  def %Just{ value: val } ~> func do
+    apply( func, [ val ] )
+  end
+
 end
 
 
@@ -175,18 +181,25 @@ defmodule Maybe.Example do
   import Maybe
 
   def run do
-    IO.inspect return( nil ) # %Nothing{}
-    IO.inspect return( 5 ) # %Just{ value: 5 }
-
     colours = fn name -> return( %{red: "#f00", green: "#0f0", blue: "#00f"}[name] ) end
     get_code = fn "#" <> code -> code end
-    upcase = fn str -> String.upcase( str ) end
 
-    IO.inspect( colours.( :green ) ~>> get_code ~>> upcase ) # %Just{ value: "0F0" }
-    IO.inspect( colours.( :lilac ) ~>> get_code ~>> upcase ) # %Nothing{}
+    IO.inspect(
+      colours.( :green )
+        ~>> get_code # %Just{ value: "0f0" }
+        ~> &String.upcase/1 # "0F0"
+    )
+
+    IO.inspect(
+      colours.( :lilac )
+        ~>> get_code # %Nothing{}
+        ~> &String.upcase/1 # nil
+    )
   end
 
 end
+
+Maybe.Example.run
 ```
 
 
