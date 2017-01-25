@@ -20,8 +20,11 @@ let g:airline_theme='zenburn'
 " for NERDTree
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
-map <F3> :NerdTreeToggle<CR>
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NerdTree.isTabTree()) | q | endif
+silent! nmap <F2> :NERDTreeToggle<CR>
+silent! map <F3> :NERDTreeFind<CR>
+let g:NERDTreeMapActivateNode="<F3>"
+let g:NERDTreeMapPreview="<F4>"
 
 " for syntastic
 set statusline+=%#warningmsg#
