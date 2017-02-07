@@ -43,3 +43,6 @@ let g:NERDTreeMapPreview="<F4>"
 " for airline
 set laststatus=2
 let g:airline_theme='bubblegum'
+
+" connects clipboard to pbcopy pbpaste
+set clipboard=unnamed
