@@ -8,3 +8,7 @@ ALSO, in `.gitconfig`
 ```
 autocrlf = false
 ```
+AND, for pastbin to work with tmux
+```
+brew install reattach-to-user-namespace
+```
