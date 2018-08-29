@@ -16,11 +16,14 @@ color onedark
 execute pathogen#infect()
 filetype plugin indent on
 
+" for vim
+silent! map <F9> :tabprev<CR>
+silent! map <F10> :tabnext<CR>
+
+" for syntastic
 set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
-
-" for syntastic
 let g:syntastic_always_populate_loc_list = 1
 let g:syntastic_auto_loc_list = 1
 let g:syntastic_check_on_open = 1
@@ -29,6 +32,7 @@ set statusline+=%#warningmsg#
 set statusline+=%{SyntasticStatuslineFlag()}
 set statusline+=%*
 let g:syntastic_javascript_checkers = ['eslint']
+let g:syntastic_ruby_checkers = ['rubocop']
 
 " for nerdtree
 autocmd StdinReadPre * let s:std_in=1
@@ -36,6 +40,7 @@ autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTree") && b:NerdTree.isTabTree()) | q | endif
 silent! nmap <F2> :NERDTreeToggle<CR>
 silent! map <F3> :NERDTreeFind<CR>
+let NERDTreeShowHidden=1
 
 let g:NERDTreeMapActivateNode="<F3>"
 let g:NERDTreeMapPreview="<F4>"
@@ -46,3 +51,7 @@ let g:airline_theme='bubblegum'
 
 " connects clipboard to pbcopy pbpaste
 set clipboard=unnamed
+
+" fzf searcher
+set rtp+=/usr/local/opt/fzf
+

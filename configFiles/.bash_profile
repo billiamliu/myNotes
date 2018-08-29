@@ -10,21 +10,14 @@ export LSCOLORS=GxFxCxDxBxegedabagaced
 # alias textedit='open -a TextEdit'
 alias l='ls -al'
 alias s='git status'
-alias t='tmux -a'
-alias gits='git status'
-
-eval "$(thefuck --alias fuck)"
+alias x='exit'
+alias ctags='/usr/local/bin/ctags'
 
 #git-autocomplete
 if [ -f ~/.git-completion.bash ]; then
 	. ~/.git-completion.bash
 fi
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"
-
-[[ -s "$HOME/.rvm/scripts/rvm" ]] && source "$HOME/.rvm/scripts/rvm" # Load RVM into a shell session *as a function*
-
-# if can't change bash to zshell
-# export SHELL=/bin/zsh
-# exec /bin/zsh -l
+# asdf universal version manager
+. $HOME/.asdf/asdf.sh
+. $HOME/.asdf/completions/asdf.bash
